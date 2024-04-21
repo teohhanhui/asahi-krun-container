@@ -19,15 +19,20 @@ RUN set -eux; \
 		mesa-libGL \
 		mesa-va-drivers \
 	"; \
+	soundPackages=" \
+		alsa-lib \
+		pipewire-libs \
+		pulseaudio \
+		pulseaudio-libs \
+	"; \
 	dnf install -y --setopt=install_weak_deps=False 'dnf-command(copr)'; \
 	dnf copr enable -y slp/asahi-mesa; \
 	dnf copr enable -y teohhanhui/asahi-krun; \
 	dnf install -y --setopt=install_weak_deps=False \
 		$mesaPackages \
-		alsa-lib \
+		$soundPackages \
 		dhcp-client \
 		glmark2 \
-		pipewire-libs \
 		sommelier \
 		xorg-x11-server-Xwayland \
 	; \
@@ -39,4 +44,4 @@ COPY --from=docker.io/tianon/gosu /gosu /usr/local/bin/
 COPY entrypoint.sh entrypoint-user.sh /usr/local/bin/
 
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["entrypoint-user.sh"]
+CMD ["entrypoint-user.sh", "bash"]
